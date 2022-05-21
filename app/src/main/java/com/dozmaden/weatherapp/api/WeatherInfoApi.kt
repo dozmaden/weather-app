@@ -7,7 +7,7 @@ import retrofit2.http.Path
 const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
 interface WeatherInfoApi {
-    @GET("/onecall?lat={lat}&lon={lon}&units={units}&exclude=minutely&appid={api}")
+    @GET("/onecall?lat={lat}&lon={lon}&units={units}&exclude=minutely,alerts&appid={api}")
     fun getWeatherInfo(
         @Path("lat") latitude: Double,
         @Path("lon") longitude: Double,
