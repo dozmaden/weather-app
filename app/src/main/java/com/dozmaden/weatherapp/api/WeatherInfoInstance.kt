@@ -11,8 +11,10 @@ object WeatherInfoInstance {
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
     private val httpClient =
-        OkHttpClient.Builder().addNetworkInterceptor(logInterceptor)
-            .addInterceptor(ApiKeyInterceptor()).build()
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(logInterceptor)
+            .addInterceptor(ApiKeyInterceptor())
+            .build()
 
     private val retrofit =
         Retrofit.Builder()
