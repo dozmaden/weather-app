@@ -9,8 +9,8 @@ const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 interface WeatherInfoApi {
     @GET("/onecall?lat={lat}&lon={lon}&units={units}&exclude=minutely&appid={api}")
     fun getWeatherInfo(
-        @Path("lat") latitude: String,
-        @Path("lon") longitude: String,
+        @Path("lat") latitude: Double,
+        @Path("lon") longitude: Double,
         @Path("units") units: String,
         @Path("api") apiKey: String
     ): WeatherInfo
