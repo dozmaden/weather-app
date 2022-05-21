@@ -1,6 +1,6 @@
 package com.dozmaden.weatherapp.dto
 
-data class WeatherInfo (
+data class WeatherInfo(
     val lat: Double,
     val lon: Double,
     val timezone: String,
