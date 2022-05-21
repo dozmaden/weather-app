@@ -10,7 +10,7 @@ data class WeatherInfo (
     val clouds: Clouds,
     val dt: Int,
     val sys: ApiSystemInfo,
-    val timezone: ApiTimezone,
+    val timezone: Int,
     val id: Int,
     val name: String,
     val cod: Int
