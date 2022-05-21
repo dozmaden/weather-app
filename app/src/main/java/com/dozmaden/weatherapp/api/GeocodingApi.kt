@@ -1,6 +1,6 @@
 package com.dozmaden.weatherapp.api
 
-import com.dozmaden.weatherapp.dto.Location
+import com.dozmaden.weatherapp.dto.LocationInfo
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,7 +14,7 @@ interface GeocodingApi {
     fun directGeocoding(
         @Path("city") city: String,
 //        @Path("api") apiKey: String
-    ): Single<List<Location>>
+    ): Single<List<LocationInfo>>
 
     @GET("/reverse?lat={lat}&lon={lon}&limit=1&appid={api}")
     // &appid={api}
@@ -22,5 +22,5 @@ interface GeocodingApi {
         @Path("lat") latitude: Double,
         @Path("lon") longitude: Double,
 //        @Path("api") apiKey: String
-    ): Single<List<Location>>
+    ): Single<List<LocationInfo>>
 }

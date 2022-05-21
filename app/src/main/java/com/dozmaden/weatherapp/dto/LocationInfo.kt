@@ -1,6 +1,6 @@
 package com.dozmaden.weatherapp.dto
 
-data class Location(
+data class LocationInfo(
     val name: String,
     val local_names: LocalNames,
     val lat: Double,
