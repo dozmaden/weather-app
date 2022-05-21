@@ -1,5 +1,6 @@
 package com.dozmaden.weatherapp.api
 
+import com.dozmaden.weatherapp.dto.WeatherInfo
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -12,5 +13,5 @@ interface WeatherInfoApi {
         @Path("lon") longitude: String,
         @Path("units") units: String,
         @Path("api") apiKey: String
-    )
+    ): WeatherInfo
 }
