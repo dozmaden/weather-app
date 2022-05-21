@@ -12,9 +12,9 @@ class MainFragment : Fragment() {
 
     private var _binding: MainFragmentBinding? = null
 
-        // This property is only valid between onCreateView and
-        // onDestroyView.
-                                   private val binding get() = _binding!!
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
 
