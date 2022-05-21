@@ -12,12 +12,12 @@ interface GeocodingApi {
     fun directGeocoding(
         @Path("city") city: String,
         @Path("api") apiKey: String
-    ) : List<Location>
+    ): List<Location>
 
     @GET("/reverse?lat={lat}&lon={lon}&limit=1&appid={api}")
     fun reverseGeocoding(
         @Path("lat") latitude: Double,
         @Path("lon") longitude: Double,
         @Path("api") apiKey: String
-    ) : List<Location>
+    ): List<Location>
 }
