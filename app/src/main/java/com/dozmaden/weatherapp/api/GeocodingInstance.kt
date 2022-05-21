@@ -7,10 +7,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object GeocodingInstance {
+
     private val logInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
-    private val httpClient = OkHttpClient.Builder().addNetworkInterceptor(logInterceptor).build()
+    private val httpClient = OkHttpClient.Builder().addNetworkInterceptor(logInterceptor)
+        .addInterceptor(ApiKeyInterceptor()).build()
 
     private val retrofit =
         Retrofit.Builder()
