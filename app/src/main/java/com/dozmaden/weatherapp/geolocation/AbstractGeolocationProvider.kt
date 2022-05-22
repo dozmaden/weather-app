@@ -1,12 +1,14 @@
 package com.dozmaden.weatherapp.geolocation
 
 import android.location.Location
+import android.util.Log
 
 internal abstract class AbstractGeolocationProvider : GeolocationProvider {
 
-    protected lateinit var currentLocation: Location
+    protected var currentLocation: Location? = null
 
-    override fun getLocation(): Location {
+    override fun getLocation(): Location? {
+        Log.d("AbstractGeolocationProvider", currentLocation.toString())
         return currentLocation
     }
 }
