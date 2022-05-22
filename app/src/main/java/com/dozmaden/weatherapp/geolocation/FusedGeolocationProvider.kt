@@ -30,8 +30,6 @@ internal class FusedGeolocationProvider(private val context: Context) :
             .addOnSuccessListener {
                 currentLocation = it
                 Log.i("FusedGeolocationProvider", "Got current location!")
-                Log.i("IMHERE", it.latitude.toString())
-                Log.i("IMHERE", it.longitude.toString())
             }
 
         currentLocation?.let {
@@ -40,6 +38,9 @@ internal class FusedGeolocationProvider(private val context: Context) :
                 Log.i("FusedGeolocationProvider", "Got last available location!")
             }
         }
+
+        Log.i("FusedGeolocationProvider", "Latitude: " + currentLocation?.latitude.toString())
+        Log.i("FusedGeolocationProvider", "Longitude: " + currentLocation?.longitude.toString())
 
         return currentLocation
     }
