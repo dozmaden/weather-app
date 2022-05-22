@@ -35,15 +35,18 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())){
+        if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())) {
             requestPermissions()
         } else {
-            viewModel.getLocation()
 
-            viewModel.currentGeolocation.value?.let {
-                Log.i("IMHERE", "here!")
-                binding.weather.text = it.latitude.toString()
+            viewModel.currentGeolocation.observe(viewLifecycleOwner) {
+                it?.let {
+                    Log.i("IMHERE", "here!")
+                    binding.weather.text = it.latitude.toString()
+                }
             }
+
+            viewModel.getLocation()
 
             Log.i("IMHERE", "nowImhere!")
         }
