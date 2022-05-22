@@ -9,7 +9,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 object GeolocationProviderFactory {
     fun getGeolocationProvider(context: Context): GeolocationProvider {
         return if (checkPlayServices(context)) {
-            Log.i("GeolocationUtility", "Google Play Services are available!")
+            Log.i("GeolocationProviderFactory", "Google Play Services are available!")
             FusedGeolocationProvider(context)
         } else SystemGeolocationProvider()
     }
@@ -24,7 +24,7 @@ object GeolocationProviderFactory {
                 // PLAY_SERVICES_RESOLUTION_REQUEST)
                 //                    ?.show()
             } else {
-                Log.i("MainFragment", "This device is not supported.")
+                Log.i("GeolocationProviderFactory", "This device is not supported.")
                 //                finish()
             }
             return false

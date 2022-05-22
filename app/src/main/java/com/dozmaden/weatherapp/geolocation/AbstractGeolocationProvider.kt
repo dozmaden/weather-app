@@ -8,7 +8,6 @@ internal abstract class AbstractGeolocationProvider : GeolocationProvider {
     protected var currentLocation: Location? = null
 
     override fun getLocation(): Location? {
-        Log.d("AbstractGeolocationProvider", currentLocation.toString())
         return currentLocation
     }
 }
