@@ -46,7 +46,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 }
             }
 
-            viewModel.getLocation()
+            viewModel.getCurrentLocation()
 
             Log.i("IMHERE", "nowImhere!")
         }
