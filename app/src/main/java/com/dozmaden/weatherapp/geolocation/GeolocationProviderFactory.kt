@@ -8,22 +8,8 @@ import com.google.android.gms.common.GoogleApiAvailability
 
 object GeolocationProviderFactory {
     fun getGeolocationProvider(context: Context): GeolocationProvider {
-
-        if (checkPlayServices(context)) {
+        return if (checkPlayServices(context)) {
             Log.i("GeolocationUtility", "Google Play Services are available!")
-        } else {
-            Log.i("GeolocationUtility", "Google Play Services are unavailable!")
-        }
-
-        return if (GeolocationPermissionsUtility.hasLocationPermissions(context)) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
             FusedGeolocationProvider(context)
         } else SystemGeolocationProvider()
     }
