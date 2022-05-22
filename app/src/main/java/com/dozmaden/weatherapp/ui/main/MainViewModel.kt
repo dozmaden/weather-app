@@ -15,9 +15,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _currentGeolocation = MutableLiveData<Location>()
     internal val currentGeolocation: LiveData<Location> = _currentGeolocation
-//        .apply {
-//        postValue(geolocationProvider.getLocation())
-//    }
+//                .apply { postValue(geolocationProvider.getLocation()) }
 
     fun getLocation() {
         _currentGeolocation.postValue(geolocationProvider.getLocation())
