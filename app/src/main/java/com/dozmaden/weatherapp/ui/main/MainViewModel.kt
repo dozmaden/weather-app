@@ -5,20 +5,22 @@ import android.location.Location
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dozmaden.weatherapp.GeolocationProvider
-import com.dozmaden.weatherapp.dto.WeatherInfo
-import com.dozmaden.weatherapp.utils.GeolocationUtility
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
+import com.dozmaden.weatherapp.geolocation.GeolocationProvider
+import com.dozmaden.weatherapp.geolocation.GeolocationProviderFactory
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val geolocationProvider: GeolocationProvider =
-        GeolocationUtility.getGeolocationProvider(application)
+        GeolocationProviderFactory.getGeolocationProvider(application)
 
     private val _currentGeolocation = MutableLiveData<Location>()
-    internal val currentGeolocation: LiveData<Location> = _currentGeolocation.apply {
-        postValue(geolocationProvider.getLocation())
+    internal val currentGeolocation: LiveData<Location> = _currentGeolocation
+//        .apply {
+//        postValue(geolocationProvider.getLocation())
+//    }
+
+    fun getLocation() {
+        _currentGeolocation.postValue(geolocationProvider.getLocation())
     }
 
     // TODO: Implement the ViewModel
