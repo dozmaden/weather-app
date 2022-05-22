@@ -1,3 +1,11 @@
 package com.dozmaden.weatherapp.geolocation
 
-internal class SystemGeolocationProvider : AbstractGeolocationProvider()
+import android.location.Location
+import android.util.Log
+
+internal class SystemGeolocationProvider : AbstractGeolocationProvider() {
+    override fun getLocation(): Location {
+        Log.i("SystemGeolocationProvider", "here!")
+        TODO()
+    }
+}
