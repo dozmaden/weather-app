@@ -37,21 +37,56 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())) {
             requestPermissions()
-        } else {
-
-            viewModel.currentGeolocation.observe(viewLifecycleOwner) {
-                it?.let {
-                    Log.i("IMHERE", "here!")
-                    binding.weather.text = it.latitude.toString()
-                }
-            }
-
-            viewModel.getCurrentLocation()
-
-            Log.i("IMHERE", "nowImhere!")
         }
 
+        setGeolocationObserver()
+        setWeatherObserver()
+
+        //        getCurrentWeather()
+        //        getFutureWeather()
+
+        viewModel.getCurrentWeather()
+
         return binding.root
+    }
+
+    private fun setGeolocationObserver() {
+        viewModel.currentGeolocation.observe(viewLifecycleOwner) {
+            it?.let {
+                Log.i("MainFragment", "Geolocation update!")
+                binding.weather.text = it.latitude.toString()
+            }
+        }
+    }
+
+    private fun setWeatherObserver() {
+        viewModel.currentWeatherInfo.observe(viewLifecycleOwner) {
+            it?.let { binding.weather.text = it.current.weather[0].description }
+        }
+    }
+
+    //    override fun onPause() {
+    //        Log.i("MainFragment", "On Pause!")
+    //        viewModel.getCurrentWeather()
+    //        super.onPause()
+    //    }
+
+    override fun onResume() {
+        Log.i("MainFragment", "On Resume!")
+        viewModel.getCurrentWeather()
+        super.onResume()
+    }
+    //
+
+    //        override fun onStart() {
+    //            Log.i("MainFragment", "On Start!")
+    //            viewModel.getCurrentWeather()
+    //            super.onStart()
+    //        }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private val REQUEST_CODE_LOCATION_PERMISSION = 0
