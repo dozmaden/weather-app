@@ -2,7 +2,6 @@ package com.dozmaden.weatherapp.geolocation
 
 import android.content.Context
 import android.util.Log
-import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 

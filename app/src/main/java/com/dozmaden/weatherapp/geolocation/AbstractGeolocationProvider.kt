@@ -1,7 +1,6 @@
 package com.dozmaden.weatherapp.geolocation
 
 import android.location.Location
-import android.util.Log
 
 internal abstract class AbstractGeolocationProvider : GeolocationProvider {
 
