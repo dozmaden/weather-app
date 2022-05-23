@@ -1,16 +1,16 @@
 package com.dozmaden.weatherapp.dto
 
 data class Weathers(
-    val current: Current,
-    val daily: List<Daily>,
-    val hourly: List<Hourly>,
+    val current: CurrentWeather,
+    val daily: List<DayWeather>,
+    val hourly: List<HourWeather>,
     val lat: Double,
     val lon: Double,
     val timezone: String,
     val timezone_offset: Int
 )
 
-data class Current(
+data class CurrentWeather(
     val clouds: Int,
     val dew_point: Double,
     val dt: Int,
@@ -27,7 +27,7 @@ data class Current(
     val wind_speed: Double
 )
 
-data class Daily(
+data class DayWeather(
     val clouds: Int,
     val dew_point: Double,
     val dt: Int,
@@ -49,7 +49,7 @@ data class Daily(
     val wind_speed: Double
 )
 
-data class Hourly(
+data class HourWeather(
     val clouds: Int,
     val dew_point: Double,
     val dt: Int,
