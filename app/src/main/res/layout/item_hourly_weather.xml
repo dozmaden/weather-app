@@ -18,36 +18,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/hourly_weather_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:adjustViewBounds="true"
-                android:contentDescription="HourlyWeatherWeatherInfo"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <LinearLayout
                 android:id="@+id/hourly_weather_info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/hourly_weather_image"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/hourly_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@id/hourly_weather_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/hourly_weather_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="HourlyWeatherWeatherInfo"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toTopOf="@id/hourly_temperature"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/hourly_weather_image" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/hourly_temperature"
@@ -56,7 +54,7 @@
                     app:layout_constraintBottom_toTopOf="@id/hourly_main_description"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/hourly_time" />
+                    app:layout_constraintTop_toBottomOf="@id/hourly_weather_image" />
 
                 <TextView
                     android:id="@+id/hourly_main_description"
