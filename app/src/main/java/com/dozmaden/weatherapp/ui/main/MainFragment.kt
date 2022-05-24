@@ -7,12 +7,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.Collections.emptyList
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -24,6 +28,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,33 +40,46 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        recyclerView = binding.dailyWeatherRecyclerView
+        recyclerView.adapter = DayWeatherAdapter(emptyList())
+
         if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())) {
             requestPermissions()
         }
 
-        setGeolocationObserver()
-        setWeatherObserver()
+        setCurrentWeatherObserver()
+        setDailyWeatherObserver()
+        //        setHourlyWeatherObserver()
 
-        //        getCurrentWeather()
-        //        getFutureWeather()
-
-        viewModel.getCurrentWeather()
+        viewModel.getWeatherData()
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         return binding.root
     }
 
-    private fun setGeolocationObserver() {
-        viewModel.currentGeolocation.observe(viewLifecycleOwner) {
-            it?.let {
-                Log.i("MainFragment", "Geolocation update!")
-                binding.weather.text = it.latitude.toString()
+    private fun setCurrentWeatherObserver() {
+        viewModel.currentWeatherInfo.observe(viewLifecycleOwner) {
+            it.let {
+                binding.currentTemperature.text = it.temp.toString()
+                binding.currentFeelslike.text = it.feels_like.toString()
+                binding.currentMainDescription.text = it.weather[0].main
+                if(it.weather[0].description.isNotEmpty()){
+                    binding.currentMainDescription.text = it.weather[0].description
+                }
+                binding.currentClouds.text = it.clouds.toString()
+                binding.currentHumidity.text = it.humidity.toString()
+                binding.currentVisibility.text = it.visibility.toString()
+                binding.currentWindSpeed.text = it.wind_speed.toString()
             }
         }
     }
 
-    private fun setWeatherObserver() {
-        viewModel.currentWeatherInfo.observe(viewLifecycleOwner) {
-            it?.let { binding.weather.text = it.current.weather[0].description }
+    private fun setDailyWeatherObserver() {
+        viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
+            it?.let {
+                val adapter = DayWeatherAdapter(it)
+                recyclerView.adapter = adapter
+            }
         }
     }
 
@@ -73,10 +91,9 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     override fun onResume() {
         Log.i("MainFragment", "On Resume!")
-        viewModel.getCurrentWeather()
+        viewModel.getWeatherData()
         super.onResume()
     }
-    //
 
     //        override fun onStart() {
     //            Log.i("MainFragment", "On Start!")
