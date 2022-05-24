@@ -17,7 +17,7 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
         // that is used to hold list item
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.weather_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_daily_weather, parent, false)
 
         return ViewHolder(view)
     }
