@@ -42,8 +42,8 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-//        dailyRecyclerView = binding.dailyWeatherRecyclerView
-//        dailyRecyclerView.adapter = DayWeatherAdapter(emptyList())
+        dailyRecyclerView = binding.dailyWeatherRecyclerView
+        dailyRecyclerView.adapter = DayWeatherAdapter(emptyList())
 
         hourlyRecyclerView = binding.hourlyWeatherRecyclerView
         hourlyRecyclerView.adapter = HourlyWeatherAdapter(emptyList())
@@ -53,12 +53,12 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
 
         setCurrentWeatherObserver()
-//        setDailyWeatherObserver()
+        setDailyWeatherObserver()
         setHourlyWeatherObserver()
 
         viewModel.getWeatherData()
-//        dailyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        dailyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         val horizontalLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         hourlyRecyclerView.layoutManager = horizontalLayoutManager
@@ -88,14 +88,14 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-//    private fun setDailyWeatherObserver() {
-//        viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
-//            it?.let {
-//                val adapter = DayWeatherAdapter(it)
-//                dailyRecyclerView.adapter = adapter
-//            }
-//        }
-//    }
+    private fun setDailyWeatherObserver() {
+        viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
+            it?.let {
+                val adapter = DayWeatherAdapter(it)
+                dailyRecyclerView.adapter = adapter
+            }
+        }
+    }
 
     private fun setHourlyWeatherObserver() {
         viewModel.hourlyWeatherInfo.observe(viewLifecycleOwner) {
