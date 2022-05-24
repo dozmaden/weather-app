@@ -10,6 +10,6 @@
         android:id="@+id/navigation_main"
         android:name="com.dozmaden.weatherapp.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_main" />
 
 </navigation>
