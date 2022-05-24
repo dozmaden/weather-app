@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
-import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.Collections.emptyList
+
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -28,7 +29,8 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var dailyRecyclerView: RecyclerView
+    private lateinit var hourlyRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,19 +42,26 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        recyclerView = binding.dailyWeatherRecyclerView
-        recyclerView.adapter = DayWeatherAdapter(emptyList())
+//        dailyRecyclerView = binding.dailyWeatherRecyclerView
+//        dailyRecyclerView.adapter = DayWeatherAdapter(emptyList())
+
+        hourlyRecyclerView = binding.hourlyWeatherRecyclerView
+        hourlyRecyclerView.adapter = HourlyWeatherAdapter(emptyList())
 
         if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())) {
             requestPermissions()
         }
 
         setCurrentWeatherObserver()
-        setDailyWeatherObserver()
-        //        setHourlyWeatherObserver()
+//        setDailyWeatherObserver()
+        setHourlyWeatherObserver()
 
         viewModel.getWeatherData()
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//        dailyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        val horizontalLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        hourlyRecyclerView.layoutManager = horizontalLayoutManager
 
         return binding.root
     }
@@ -63,7 +72,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 Glide.with(this)
                     .load("https://openweathermap.org/img/wn/" + it.weather[0].icon + "@2x.png")
                     .centerCrop()
-//                    .placeholder()
+                    //                    .placeholder()
                     .into(binding.currentWeatherImage)
                 binding.currentTemperature.text = it.temp.toString()
                 binding.currentFeelslike.text = it.feels_like.toString()
@@ -79,11 +88,20 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    private fun setDailyWeatherObserver() {
-        viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
+//    private fun setDailyWeatherObserver() {
+//        viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
+//            it?.let {
+//                val adapter = DayWeatherAdapter(it)
+//                dailyRecyclerView.adapter = adapter
+//            }
+//        }
+//    }
+
+    private fun setHourlyWeatherObserver() {
+        viewModel.hourlyWeatherInfo.observe(viewLifecycleOwner) {
             it?.let {
-                val adapter = DayWeatherAdapter(it)
-                recyclerView.adapter = adapter
+                val adapter = HourlyWeatherAdapter(it)
+                hourlyRecyclerView.adapter = adapter
             }
         }
     }
