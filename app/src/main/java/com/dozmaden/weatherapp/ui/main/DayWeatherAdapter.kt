@@ -3,8 +3,10 @@ package com.dozmaden.weatherapp.ui.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.dto.DayWeather
 
@@ -31,6 +33,13 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
         // sets the text to the textview from our itemHolder class
         holder.dayTemperatureTextView.text = mList[position].temp.day.toString()
         holder.dayDescriptionTextView.text = mList[position].weather[0].main
+        Glide.with(holder.dayWeatherImageView.context)
+            .load(
+                "https://openweathermap.org/img/wn/" + mList[position].weather[0].icon + "@2x.png"
+            )
+            .centerCrop()
+            //                    .placeholder()
+            .into(holder.dayWeatherImageView)
     }
 
     // return the number of the items in the list
@@ -43,5 +52,7 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
         //        val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val dayTemperatureTextView: TextView = itemView.findViewById(R.id.day_temperature)
         val dayDescriptionTextView: TextView = itemView.findViewById(R.id.day_main_description)
+        val dayWeatherImageView: ImageView =
+            itemView.findViewById<ImageView?>(R.id.daily_weather_image)
     }
 }
