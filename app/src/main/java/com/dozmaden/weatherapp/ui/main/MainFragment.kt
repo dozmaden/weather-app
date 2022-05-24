@@ -7,16 +7,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
+import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.Collections.emptyList
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -60,10 +60,15 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun setCurrentWeatherObserver() {
         viewModel.currentWeatherInfo.observe(viewLifecycleOwner) {
             it.let {
+                Glide.with(this)
+                    .load("https://openweathermap.org/img/wn/" + it.weather[0].icon + "@2x.png")
+                    .centerCrop()
+//                    .placeholder()
+                    .into(binding.currentWeatherImage)
                 binding.currentTemperature.text = it.temp.toString()
                 binding.currentFeelslike.text = it.feels_like.toString()
                 binding.currentMainDescription.text = it.weather[0].main
-                if(it.weather[0].description.isNotEmpty()){
+                if (it.weather[0].description.isNotEmpty()) {
                     binding.currentMainDescription.text = it.weather[0].description
                 }
                 binding.currentClouds.text = it.clouds.toString()
