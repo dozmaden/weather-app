@@ -36,7 +36,7 @@ class HourlyWeatherAdapter(private val mList: List<HourWeather>) :
 
         //        val simpleDate = SimpleDateFormat("dd/MM/YYYY hh:mm:ss")
         val simpleDate = SimpleDateFormat("HH aa")
-        val currentDate = simpleDate.format(mList[position].dt * 1000)
+        val currentDate = simpleDate.format(mList[position].dt.toLong() * 1000)
 
         holder.hourlyTimeTextView.text = currentDate
 

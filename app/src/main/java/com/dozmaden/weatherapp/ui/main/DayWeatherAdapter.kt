@@ -41,8 +41,8 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
         holder.dayDescriptionTextView.text = mList[position].weather[0].main
 
         //        val simpleDate = SimpleDateFormat("dd/MM/YYYY hh:mm:ss")
-        val simpleDate = SimpleDateFormat("EEE, MMM")
-        val currentDate = simpleDate.format(mList[position].dt * 1000)
+        val simpleDate = SimpleDateFormat("EEE, MMM d")
+        val currentDate = simpleDate.format(mList[position].dt.toLong() * 1000)
 
         holder.dayTimeTextView.text = currentDate
 
