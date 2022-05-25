@@ -119,12 +119,12 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    //    override fun onPause() {
-    //        Log.i("MainFragment", "On Pause!")
-    //        viewModel.getCurrentWeather()
-    //        super.onPause()
-    //    }
-
+//    override fun onPause() {
+//        Log.i("MainFragment", "On Pause!")
+//        viewModel.getWeatherData()
+//        super.onPause()
+//    }
+//
     override fun onResume() {
         Log.i("MainFragment", "On Resume!")
         viewModel.getWeatherData()
