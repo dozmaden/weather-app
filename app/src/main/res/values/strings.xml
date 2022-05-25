@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="celcius_temperature"> %s °C </string>
+    <string name="feels_like_celcius_temperature"> Feels like %s °C </string>
+    <string name="humidity"> Humidity: %s %% </string>
+    <string name="cloudiness"> Cloudiness: %s %% </string>
+    <string name="visibility"> Visibility: %s metres </string>
+    <string name="windspeed"> Wind Speed: %s m/s </string>
+    <string name="pressure"> Pressure: %s hPa </string>
 </resources>
