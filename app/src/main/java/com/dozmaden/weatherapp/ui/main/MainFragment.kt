@@ -52,6 +52,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             requestPermissions()
         }
 
+        setLocationObserver()
         setCurrentWeatherObserver()
         setDailyWeatherObserver()
         setHourlyWeatherObserver()
@@ -64,6 +65,12 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         hourlyRecyclerView.layoutManager = horizontalLayoutManager
 
         return binding.root
+    }
+
+    private fun setLocationObserver() {
+        viewModel.currentGeolocationName.observe(viewLifecycleOwner) {
+            binding.locationName.text = it
+        }
     }
 
     private fun setCurrentWeatherObserver() {
