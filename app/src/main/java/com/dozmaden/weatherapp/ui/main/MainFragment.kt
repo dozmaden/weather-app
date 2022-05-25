@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
+import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.Collections.emptyList
-
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -74,16 +74,29 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                     .centerCrop()
                     //                    .placeholder()
                     .into(binding.currentWeatherImage)
-                binding.currentTemperature.text = it.temp.toString()
-                binding.currentFeelslike.text = it.feels_like.toString()
+
+                binding.currentTemperature.text =
+                    resources.getString(R.string.celcius_temperature).format(it.temp.toString())
+
+                binding.currentFeelslike.text =
+                    resources
+                        .getString(R.string.feels_like_celcius_temperature)
+                        .format(it.feels_like.toString())
+
                 binding.currentMainDescription.text = it.weather[0].main
-                if (it.weather[0].description.isNotEmpty()) {
-                    binding.currentMainDescription.text = it.weather[0].description
-                }
-                binding.currentClouds.text = it.clouds.toString()
-                binding.currentHumidity.text = it.humidity.toString()
-                binding.currentVisibility.text = it.visibility.toString()
-                binding.currentWindSpeed.text = it.wind_speed.toString()
+                binding.currentAdditionalDescription.text = it.weather[0].description
+
+                binding.currentClouds.text =
+                    resources.getString(R.string.cloudiness).format(it.clouds.toString())
+
+                binding.currentHumidity.text =
+                    resources.getString(R.string.humidity).format(it.humidity.toString())
+
+                binding.currentVisibility.text =
+                    resources.getString(R.string.visibility).format(it.visibility.toString())
+
+                binding.currentWindSpeed.text =
+                    resources.getString(R.string.windspeed).format(it.wind_speed.toString())
             }
         }
     }
