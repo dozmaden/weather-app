@@ -14,7 +14,7 @@ object GeocodingRepository {
             .subscribeOn(Schedulers.io())
     }
 
-    internal fun reverseGeocode(lat: Double, lon: Double) : Single<List<LocationInfo>> {
+    internal fun reverseGeocode(lat: Double, lon: Double): Single<List<LocationInfo>> {
         return GeocodingInstance.GEOCODING_API.reverseGeocoding(lat, lon)
             .retry(4L)
             .delay(300L, TimeUnit.MILLISECONDS, true)

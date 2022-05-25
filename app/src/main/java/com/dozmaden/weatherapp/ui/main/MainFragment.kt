@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
-import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.Collections.emptyList
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -119,12 +119,12 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-//    override fun onPause() {
-//        Log.i("MainFragment", "On Pause!")
-//        viewModel.getWeatherData()
-//        super.onPause()
-//    }
-//
+    //    override fun onPause() {
+    //        Log.i("MainFragment", "On Pause!")
+    //        viewModel.getWeatherData()
+    //        super.onPause()
+    //    }
+    //
     override fun onResume() {
         Log.i("MainFragment", "On Resume!")
         viewModel.getWeatherData()
