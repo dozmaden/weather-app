@@ -17,6 +17,7 @@ class WeatherPreferences(context: Context) {
         const val KEY_CURRENT_WEATHER = "key_weather_current"
         const val KEY_DAILY_WEATHER = "key_weather_daily"
         const val KEY_HOURLY_WEATHER = "key_weather_hourly"
+        const val KEY_LOCATION = "key_location_name"
     }
 
     private val gson = Gson()
@@ -27,10 +28,16 @@ class WeatherPreferences(context: Context) {
     private val preferencesEditor: SharedPreferences.Editor = preferences.edit()
 
     fun saveWeatherData(weatherData: Weathers) {
-        Log.i("WeatherPreference", "Caching data!")
+        Log.i("WeatherPreference", "Caching weather data!")
         preferencesEditor.putString(KEY_CURRENT_WEATHER, gson.toJson(weatherData.current))
         preferencesEditor.putString(KEY_DAILY_WEATHER, gson.toJson(weatherData.daily))
         preferencesEditor.putString(KEY_HOURLY_WEATHER, gson.toJson(weatherData.hourly))
+        preferencesEditor.commit()
+    }
+
+    fun saveLocationName(location: String) {
+        Log.i("WeatherPreference", "Caching location name!")
+        preferencesEditor.putString(KEY_LOCATION, location)
         preferencesEditor.commit()
     }
 
@@ -50,5 +57,9 @@ class WeatherPreferences(context: Context) {
         val json: String? = preferences.getString(KEY_HOURLY_WEATHER, null)
         val type: Type = object : TypeToken<List<HourWeather>>() {}.type
         return gson.fromJson(json, type)
+    }
+
+    fun getLocationName(): String? {
+        return preferences.getString(KEY_LOCATION, null)
     }
 }
