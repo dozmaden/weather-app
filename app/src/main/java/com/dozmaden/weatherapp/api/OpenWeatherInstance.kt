@@ -6,14 +6,14 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object WeatherInfoInstance {
+object OpenWeatherInstance {
     private val logInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
     private val httpClient =
         OkHttpClient.Builder()
             .addNetworkInterceptor(logInterceptor)
-            .addInterceptor(ApiKeyInterceptor())
+            .addInterceptor(OpenWeatherApiKeyInterceptor())
             .build()
 
     private val retrofit =
@@ -24,5 +24,5 @@ object WeatherInfoInstance {
             .baseUrl(BASE_URL)
             .build()
 
-    val WEATHER_API: WeatherInfoApi = retrofit.create(WeatherInfoApi::class.java)
+    val WEATHER_API: OpenWeatherApi = retrofit.create(OpenWeatherApi::class.java)
 }

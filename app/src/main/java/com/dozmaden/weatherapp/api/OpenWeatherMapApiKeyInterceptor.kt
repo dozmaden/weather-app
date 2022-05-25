@@ -7,7 +7,7 @@ import okhttp3.Response
 
 private const val ApiKeyOpenWeather = "e9e490db954584052230aaaf3f695002"
 
-class ApiKeyInterceptor : Interceptor {
+class OpenWeatherApiKeyInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val original: Request = chain.request()
