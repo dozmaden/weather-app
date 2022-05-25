@@ -104,7 +104,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun setDailyWeatherObserver() {
         viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
             it?.let {
-                val adapter = DayWeatherAdapter(it)
+                val adapter = DayWeatherAdapter(it.subList(1, it.size))
                 dailyRecyclerView.adapter = adapter
             }
         }
