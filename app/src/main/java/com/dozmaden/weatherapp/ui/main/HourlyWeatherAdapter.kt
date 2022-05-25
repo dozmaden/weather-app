@@ -43,7 +43,7 @@ class HourlyWeatherAdapter(private val mList: List<HourWeather>) :
         holder.hourlyTemperatureTextView.text =
             holder.hourlyTemperatureTextView.resources
                 .getString(R.string.celcius_temperature)
-                .format(mList[position].temp.toString())
+                .format(mList[position].temp.toString().substringBefore("."))
 
         holder.hourlyDescriptionTextView.text = mList[position].weather[0].main
         Glide.with(holder.hourlyWeatherImageView.context)
