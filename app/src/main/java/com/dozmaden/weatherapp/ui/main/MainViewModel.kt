@@ -14,7 +14,6 @@ import com.dozmaden.weatherapp.dto.CurrentWeather
 import com.dozmaden.weatherapp.dto.DayWeather
 import com.dozmaden.weatherapp.dto.HourWeather
 import com.dozmaden.weatherapp.preferences.WeatherPreferences
-import com.dozmaden.weatherapp.repository.GeocodingRepository
 import com.dozmaden.weatherapp.repository.WeatherDataRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -36,6 +35,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val weatherCache = WeatherPreferences(application)
 
     internal fun getWeatherData() {
+
+        loadWeatherCache()
 
         val locprovider =
             getApplication<Application>().getSystemService(Context.LOCATION_SERVICE)
@@ -77,17 +78,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     },
                     onError = { Log.i("MainViewModel", "Didn't get weather from Repository!") }
                 )
-
-            GeocodingRepository.reverseGeocode(location.latitude, location.longitude)
+            WeatherDataRepository.reverseGeocoding(location.latitude, location.longitude)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = {
-                        Log.i("MainViewModel", "Got reverse geocode response!")
+                        Log.i("MainViewModel", "Reverse geocoded location!")
                         _currentGeolocationName.postValue(it[0].name)
                     },
-                    onError = {
-                        Log.i("MainViewModel", "Failed to get reverse geocode response :(")
-                    }
+                    onError = { Log.i("MainViewModel", "Failed to reverse geocode location!") }
                 )
         }
     }

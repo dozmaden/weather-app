@@ -27,10 +27,10 @@ interface OpenWeatherApi {
     //        @Path("limit") limit: Int = 5
     //    ): Single<List<LocationInfo>>
 
-    @GET("/reverse")
+    @GET("/geo/1.0/reverse")
     fun reverseGeocoding(
-        @Path("lat") latitude: Double,
-        @Path("lon") longitude: Double,
-        @Path("limit") limit: Int = 1,
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("limit") limit: Int = 1,
     ): Single<geocoding_dto>
 }
