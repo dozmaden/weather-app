@@ -1,5 +1,7 @@
 package com.dozmaden.weatherapp
 
+import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
