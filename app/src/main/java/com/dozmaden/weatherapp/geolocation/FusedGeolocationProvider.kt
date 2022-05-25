@@ -26,16 +26,10 @@ internal class FusedGeolocationProvider(private val context: Context) :
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // TODO: throw error (request the missing permissions!)
             Log.i("FusedGeolocationProvider", "No permissions!")
+            return null
         } else {
-
             fusedLocationClient
                 .getCurrentLocation(
                     PRIORITY_HIGH_ACCURACY,
@@ -54,6 +48,7 @@ internal class FusedGeolocationProvider(private val context: Context) :
                     }
                 }
 
+            // if currentLocation = null, than get last available location
             if (currentLocation == null) {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
                     if (it != null) {
@@ -68,11 +63,11 @@ internal class FusedGeolocationProvider(private val context: Context) :
             currentLocation?.let {
                 Log.i(
                     "FusedGeolocationProvider",
-                    "Latitude: " + currentLocation?.latitude.toString()
+                    "Got latitude: " + currentLocation?.latitude.toString()
                 )
                 Log.i(
                     "FusedGeolocationProvider",
-                    "Longitude: " + currentLocation?.longitude.toString()
+                    "Got longitude: " + currentLocation?.longitude.toString()
                 )
             }
         }
