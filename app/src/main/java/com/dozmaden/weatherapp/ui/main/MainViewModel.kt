@@ -9,8 +9,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dozmaden.weatherapp.dto.CurrentWeather
-import com.dozmaden.weatherapp.dto.DayWeather
-import com.dozmaden.weatherapp.dto.HourWeather
+import com.dozmaden.weatherapp.dto.DailyWeather
+import com.dozmaden.weatherapp.dto.HourlyWeather
 import com.dozmaden.weatherapp.geolocation.GeolocationProviderFactory
 import com.dozmaden.weatherapp.preferences.WeatherPreferences
 import com.dozmaden.weatherapp.repository.WeatherDataRepository
@@ -25,20 +25,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _currentWeatherInfo = MutableLiveData<CurrentWeather>()
     internal val currentWeatherInfo: LiveData<CurrentWeather> = _currentWeatherInfo
 
-    private val _dailyWeatherInfo = MutableLiveData<List<DayWeather>>()
-    internal val dailyWeatherInfo: LiveData<List<DayWeather>> = _dailyWeatherInfo
+    private val _dailyWeatherInfo = MutableLiveData<List<DailyWeather>>()
+    internal val dailyWeatherInfo: LiveData<List<DailyWeather>> = _dailyWeatherInfo
 
-    private val _hourlyWeatherInfo = MutableLiveData<List<HourWeather>>()
-    internal val hourlyWeatherInfo: LiveData<List<HourWeather>> = _hourlyWeatherInfo
+    private val _hourlyWeatherInfo = MutableLiveData<List<HourlyWeather>>()
+    internal val hourlyWeatherInfo: LiveData<List<HourlyWeather>> = _hourlyWeatherInfo
 
     private val weatherCache = WeatherPreferences(application)
 
     internal fun getWeatherData() {
 
         loadWeatherCache()
-
-        val geolocationProvider =
-            GeolocationProviderFactory.getGeolocationProvider(getApplication())
 
         if (ActivityCompat.checkSelfPermission(
                 getApplication(),
@@ -49,21 +46,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // TODO: Request permissions!
             return
         }
 
+        val geolocationProvider =
+            GeolocationProviderFactory.getGeolocationProvider(getApplication())
         val location = geolocationProvider.getLocation()
-        //        val location = geolocationProvider.getLocation()
 
         location?.let {
-            Log.i("MainViewModel", "Getting data from repsository!")
+            Log.i("MainViewModel", "Getting data from Repository!")
             WeatherDataRepository.getWeatherData(location.latitude, location.longitude, "metric")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
