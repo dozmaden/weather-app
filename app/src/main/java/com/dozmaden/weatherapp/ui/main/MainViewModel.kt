@@ -84,13 +84,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     onSuccess = {
                         Log.i("MainViewModel", "Reverse geocoded location!")
                         _currentGeolocationName.postValue(it[0].name)
+                        weatherCache.saveLocationName(it[0].name)
                     },
                     onError = { Log.i("MainViewModel", "Failed to reverse geocode location!") }
                 )
         }
     }
 
-    internal fun loadWeatherCache() {
+    private fun loadWeatherCache() {
+        weatherCache.getLocationName()?.let { _currentGeolocationName.postValue(it) }
         weatherCache.getCurrentWeatherCache()?.let { current ->
             _currentWeatherInfo.postValue(current)
         }
