@@ -24,5 +24,5 @@ object OpenWeatherInstance {
             .baseUrl(BASE_URL)
             .build()
 
-    val WEATHER_API: OpenWeatherApi = retrofit.create(OpenWeatherApi::class.java)
+    val OPEN_WEATHER_API: OpenWeatherApi = retrofit.create(OpenWeatherApi::class.java)
 }
