@@ -2,9 +2,7 @@ package com.dozmaden.weatherapp.ui.main
 
 import android.Manifest
 import android.app.Application
-import android.content.Context
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
@@ -13,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.dozmaden.weatherapp.dto.CurrentWeather
 import com.dozmaden.weatherapp.dto.DayWeather
 import com.dozmaden.weatherapp.dto.HourWeather
+import com.dozmaden.weatherapp.geolocation.GeolocationProviderFactory
 import com.dozmaden.weatherapp.preferences.WeatherPreferences
 import com.dozmaden.weatherapp.repository.WeatherDataRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -38,9 +37,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         loadWeatherCache()
 
-        val locprovider =
-            getApplication<Application>().getSystemService(Context.LOCATION_SERVICE)
-                as LocationManager
+        val geolocationProvider =
+            GeolocationProviderFactory.getGeolocationProvider(getApplication())
 
         if (ActivityCompat.checkSelfPermission(
                 getApplication(),
@@ -61,7 +59,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
-        val location = locprovider.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
+        val location = geolocationProvider.getLocation()
         //        val location = geolocationProvider.getLocation()
 
         location?.let {
