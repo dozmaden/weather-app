@@ -4,7 +4,6 @@ import com.dozmaden.weatherapp.dto.Weathers
 import com.dozmaden.weatherapp.dto.geocoding_dto
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 const val BASE_URL = "https://api.openweathermap.org/"
