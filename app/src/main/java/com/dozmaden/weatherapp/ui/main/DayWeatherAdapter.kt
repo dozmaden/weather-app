@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.dto.DayWeather
+import java.text.SimpleDateFormat
 
 class DayWeatherAdapter(private val mList: List<DayWeather>) :
     RecyclerView.Adapter<DayWeatherAdapter.ViewHolder>() {
@@ -17,7 +18,8 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
         // that is used to hold list item
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_daily_weather, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_daily_weather, parent, false)
 
         return ViewHolder(view)
     }
@@ -31,8 +33,19 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
         //        holder.imageView.setImageResource(ItemsViewModel.image)
 
         // sets the text to the textview from our itemHolder class
-        holder.dayTemperatureTextView.text = mList[position].temp.day.toString()
+        holder.dayTemperatureTextView.text =
+            holder.dayTemperatureTextView.resources
+                .getString(R.string.celcius_temperature)
+                .format(mList[position].temp.min.toString())
+
         holder.dayDescriptionTextView.text = mList[position].weather[0].main
+
+        //        val simpleDate = SimpleDateFormat("dd/MM/YYYY hh:mm:ss")
+        val simpleDate = SimpleDateFormat("EEE, MMM")
+        val currentDate = simpleDate.format(mList[position].dt * 1000)
+
+        holder.dayTimeTextView.text = currentDate
+
         Glide.with(holder.dayWeatherImageView.context)
             .load(
                 "https://openweathermap.org/img/wn/" + mList[position].weather[0].icon + "@2x.png"
@@ -51,6 +64,7 @@ class DayWeatherAdapter(private val mList: List<DayWeather>) :
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         //        val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val dayTemperatureTextView: TextView = itemView.findViewById(R.id.day_temperature)
+        val dayTimeTextView: TextView = itemView.findViewById(R.id.day_time)
         val dayDescriptionTextView: TextView = itemView.findViewById(R.id.day_main_description)
         val dayWeatherImageView: ImageView =
             itemView.findViewById<ImageView?>(R.id.daily_weather_image)
