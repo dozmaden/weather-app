@@ -1,3 +1,3 @@
-//package com.dozmaden.weatherapp.dto
+// package com.dozmaden.weatherapp.dto
 //
-//data class LocalNames(val feature_name: String)
+// data class LocalNames(val feature_name: String)

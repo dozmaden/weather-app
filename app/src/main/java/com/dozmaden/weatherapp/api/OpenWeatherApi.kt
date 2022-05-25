@@ -1,6 +1,5 @@
 package com.dozmaden.weatherapp.api
 
-import com.dozmaden.weatherapp.dto.LocationInfo
 import com.dozmaden.weatherapp.dto.Weathers
 import com.dozmaden.weatherapp.dto.geocoding_dto
 import io.reactivex.rxjava3.core.Single
@@ -21,12 +20,12 @@ interface OpenWeatherApi {
         //        @Path("api") apiKey: String
         @Query("exclude") exclude: String = "minutely,alerts"
     ): Single<Weathers>
-//
-//    @GET("/direct")
-//    fun directGeocoding(
-//        @Path("city") city: String,
-//        @Path("limit") limit: Int = 5
-//    ): Single<List<LocationInfo>>
+    //
+    //    @GET("/direct")
+    //    fun directGeocoding(
+    //        @Path("city") city: String,
+    //        @Path("limit") limit: Int = 5
+    //    ): Single<List<LocationInfo>>
 
     @GET("/reverse")
     fun reverseGeocoding(
