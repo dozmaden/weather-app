@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.dto.HourWeather
 import java.text.SimpleDateFormat
-import java.util.*
 
 class HourlyWeatherAdapter(private val mList: List<HourWeather>) :
     RecyclerView.Adapter<HourlyWeatherAdapter.ViewHolder>() {
@@ -35,13 +34,17 @@ class HourlyWeatherAdapter(private val mList: List<HourWeather>) :
 
         // sets the text to the textview from our itemHolder class
 
-//        val simpleDate = SimpleDateFormat("dd/MM/YYYY hh:mm:ss")
+        //        val simpleDate = SimpleDateFormat("dd/MM/YYYY hh:mm:ss")
         val simpleDate = SimpleDateFormat("HH aa")
         val currentDate = simpleDate.format(mList[position].dt * 1000)
 
         holder.hourlyTimeTextView.text = currentDate
 
-        holder.hourlyTemperatureTextView.text = mList[position].temp.toString()
+        holder.hourlyTemperatureTextView.text =
+            holder.hourlyTemperatureTextView.resources
+                .getString(R.string.celcius_temperature)
+                .format(mList[position].temp.toString())
+
         holder.hourlyDescriptionTextView.text = mList[position].weather[0].main
         Glide.with(holder.hourlyWeatherImageView.context)
             .load(
