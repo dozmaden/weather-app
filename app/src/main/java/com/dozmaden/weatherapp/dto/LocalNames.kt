@@ -1,4 +1,4 @@
- package com.dozmaden.weatherapp.dto
+package com.dozmaden.weatherapp.dto
 
 data class LocalNames(
     val ascii: String,

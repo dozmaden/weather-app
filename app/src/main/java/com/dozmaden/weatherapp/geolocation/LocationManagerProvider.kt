@@ -15,12 +15,14 @@ internal class LocationManagerProvider(private val context: Context) :
         val geolocationProvider =
             context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        return if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
+        return if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             // TODO: throw error (request the missing permissions!)
             Log.i("LocationManagerProvider", "No permissions!")
