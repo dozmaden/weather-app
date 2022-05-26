@@ -56,6 +56,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         location?.let {
             Log.i("MainViewModel", "Getting data from Repository!")
+            WeatherDataRepository.reverseGeocoding(location.latitude, location.longitude)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                    onSuccess = {
+                        Log.i("MainViewModel", "Reverse geocoded location!")
+                        _currentGeolocationName.postValue(it[0].name)
+                        weatherCache.saveLocationName(it[0].name)
+                    },
+                    onError = {
+                        _currentGeolocationName.postValue("Geolocation unavailable!")
+                        Log.i("MainViewModel", "Failed to reverse geocode location!")
+                    }
+                )
             WeatherDataRepository.getWeatherData(location.latitude, location.longitude, "metric")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -67,16 +80,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         weatherCache.saveWeatherData(weathers)
                     },
                     onError = { Log.i("MainViewModel", "Didn't get weather from Repository!") }
-                )
-            WeatherDataRepository.reverseGeocoding(location.latitude, location.longitude)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        Log.i("MainViewModel", "Reverse geocoded location!")
-                        _currentGeolocationName.postValue(it[0].name)
-                        weatherCache.saveLocationName(it[0].name)
-                    },
-                    onError = { Log.i("MainViewModel", "Failed to reverse geocode location!") }
                 )
         }
     }
