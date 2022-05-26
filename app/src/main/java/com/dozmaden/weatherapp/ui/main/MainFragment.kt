@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
+import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.Collections.emptyList
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -42,15 +42,13 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        checkPermissions()
+
         dailyRecyclerView = binding.dailyWeatherRecyclerView
         dailyRecyclerView.adapter = DayWeatherAdapter(emptyList())
 
         hourlyRecyclerView = binding.hourlyWeatherRecyclerView
         hourlyRecyclerView.adapter = HourlyWeatherAdapter(emptyList())
-
-        if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())) {
-            requestPermissions()
-        }
 
         setLocationObserver()
         setCurrentWeatherObserver()
@@ -126,45 +124,26 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    //    override fun onPause() {
-    //        Log.i("MainFragment", "On Pause!")
-    //        viewModel.getWeatherData()
-    //        super.onPause()
-    //    }
-    //
-    override fun onResume() {
-        Log.i("MainFragment", "On Resume!")
-        viewModel.getWeatherData()
-        super.onResume()
+    private fun checkPermissions() {
+        if (!GeolocationPermissionsUtility.hasLocationPermissions(requireContext())) {
+            requestPermissions()
+        }
     }
-
-    //        override fun onStart() {
-    //            Log.i("MainFragment", "On Start!")
-    //            viewModel.getCurrentWeather()
-    //            super.onStart()
-    //        }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private val REQUEST_CODE_LOCATION_PERMISSION = 0
 
     private fun requestPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.requestPermissions(
                 this,
-                "You need to accept location permissions!",
-                REQUEST_CODE_LOCATION_PERMISSION,
+                "This app requires location permissions!",
+                0,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         } else {
             EasyPermissions.requestPermissions(
                 this,
-                "You need to accept location permissions!",
-                REQUEST_CODE_LOCATION_PERMISSION,
+                "This app requires location permissions!",
+                0,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
@@ -187,7 +166,19 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onResume() {
+        Log.i("MainFragment", "On Resume!")
+        checkPermissions()
+        viewModel.getWeatherData()
+        super.onResume()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
