@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
-import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.Collections.emptyList
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -109,6 +109,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun setDailyWeatherObserver() {
         viewModel.dailyWeatherInfo.observe(viewLifecycleOwner) {
             it?.let {
+                // remove first day, because it's a repeat of current
                 val adapter = DayWeatherAdapter(it.subList(1, it.size))
                 dailyRecyclerView.adapter = adapter
             }
@@ -118,7 +119,8 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun setHourlyWeatherObserver() {
         viewModel.hourlyWeatherInfo.observe(viewLifecycleOwner) {
             it?.let {
-                val adapter = HourlyWeatherAdapter(it)
+                // display only 24 hours ahead, not 48 (might confuse user otherwise)
+                val adapter = HourlyWeatherAdapter(it.subList(0, 23))
                 hourlyRecyclerView.adapter = adapter
             }
         }
