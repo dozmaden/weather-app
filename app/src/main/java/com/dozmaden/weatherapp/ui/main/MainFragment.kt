@@ -1,6 +1,7 @@
 package com.dozmaden.weatherapp.ui.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,9 +16,10 @@ import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
-import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.Collections.emptyList
+
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -64,6 +66,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         hourlyRecyclerView.layoutManager = horizontalLayoutManager
 
         setupSearchView()
+        setupShareButton()
 
         return binding.root
     }
@@ -91,6 +94,31 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 }
             }
         )
+    }
+
+    private fun setupShareButton() {
+        Glide.with(this)
+            .load(R.drawable.ic_baseline_share_24)
+            .centerCrop()
+            .into(binding.shareButton)
+
+        binding.shareButton.setOnClickListener {
+            val sharingIntent = Intent(Intent.ACTION_SEND)
+            sharingIntent.type = "text/plain"
+            val shareBody = resources.getString(R.string.share_info).format(
+                binding.locationName.text.toString(),
+                binding.currentTemperature.text.toString(),
+                binding.currentFeelslike.text.toString(),
+                binding.currentHumidity.text.toString(),
+                binding.currentClouds.text.toString(),
+                binding.currentVisibility.text.toString(),
+                binding.currentWindSpeed.text.toString()
+            )
+            val shareSubject = "Current Weather Information"
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
+            startActivity(Intent.createChooser(sharingIntent, "Share using"))
+        }
     }
 
     private fun setLocationObserver() {
