@@ -18,7 +18,7 @@ object WeatherDataRepository {
             .subscribeOn(Schedulers.io())
     }
 
-    internal fun reverseGeocoding(lat: Double, lon: Double): Single<GeocodeArray> {
+    internal fun getLocationName(lat: Double, lon: Double): Single<GeocodeArray> {
         Log.i("WeatherDataRepository", "Reverse geocoding location from API!")
         return OpenWeatherInstance.OPEN_WEATHER_API.reverseGeocoding(lat, lon)
             .retry(4L)
@@ -26,7 +26,7 @@ object WeatherDataRepository {
             .subscribeOn(Schedulers.io())
     }
 
-    internal fun directGeocoding(location: String): Single<LocationInfo> {
+    internal fun searchLocation(location: String): Single<LocationInfo> {
         Log.i("WeatherDataRepository", "Direct geocoding location from API!")
         return OpenWeatherInstance.OPEN_WEATHER_API.directGeocoding(location)
             .retry(4L)
