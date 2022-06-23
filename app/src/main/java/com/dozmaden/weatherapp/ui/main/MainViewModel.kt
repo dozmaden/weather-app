@@ -19,8 +19,8 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _currentGeolocationName = MutableLiveData<String>()
-    internal val currentGeolocationName: LiveData<String> = _currentGeolocationName
+    private val _currentLocationName = MutableLiveData<String>()
+    internal val currentLocationName: LiveData<String> = _currentLocationName
 
     private val _currentWeatherInfo = MutableLiveData<CurrentWeather>()
     internal val currentWeatherInfo: LiveData<CurrentWeather> = _currentWeatherInfo
@@ -33,10 +33,27 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val weatherCache = WeatherPreferences(application)
 
-    internal fun getWeatherData() {
+    internal fun setWeatherInfo() {
+        if (!cacheIsEmpty()) {
+            loadWeatherCache()
+        } else {
+            getWeatherInfoByLocation()
+        }
+    }
 
-        loadWeatherCache()
+    internal fun searchLocations(query: String): List<String> {
+        return getLocationSuggestions(query)
+    }
 
+    internal fun setLocation(query: String) {
+        setLocationFromSuggestions(query)
+    }
+
+    private fun cacheIsEmpty(): Boolean {
+        return weatherCache.getLocationName() == null
+    }
+
+    private fun getWeatherInfoByLocation() {
         if (ActivityCompat.checkSelfPermission(
                 getApplication(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -55,37 +72,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val location = geolocationProvider.getLocation()
 
         location?.let {
-            Log.i("MainViewModel", "Getting data from Repository!")
-            WeatherDataRepository.reverseGeocoding(location.latitude, location.longitude)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = {
-                        Log.i("MainViewModel", "Reverse geocoded location!")
-                        _currentGeolocationName.postValue(it[0].name)
-                        weatherCache.saveLocationName(it[0].name)
-                    },
-                    onError = {
-                        _currentGeolocationName.postValue("Geolocation unavailable!")
-                        Log.i("MainViewModel", "Failed to reverse geocode location!")
-                    }
-                )
-            WeatherDataRepository.getWeatherData(location.latitude, location.longitude, "metric")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = { weathers ->
-                        Log.i("MainViewModel", "Got weather response from Repository!")
-                        _currentWeatherInfo.postValue(weathers.current)
-                        _dailyWeatherInfo.postValue(weathers.daily)
-                        _hourlyWeatherInfo.postValue(weathers.hourly)
-                        weatherCache.saveWeatherData(weathers)
-                    },
-                    onError = { Log.i("MainViewModel", "Didn't get weather from Repository!") }
-                )
+            getLocationName(location.latitude, location.longitude)
+            getWeatherData(location.latitude, location.longitude)
+            Log.i("MainViewModel", "Getting weather data by location from Repository!")
         }
     }
 
     private fun loadWeatherCache() {
-        weatherCache.getLocationName()?.let { _currentGeolocationName.postValue(it) }
+        weatherCache.getLocationName()?.let { _currentLocationName.postValue(it) }
         weatherCache.getCurrentWeatherCache()?.let { current ->
             _currentWeatherInfo.postValue(current)
         }
@@ -93,14 +87,70 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         weatherCache.getHourlyWeatherCache()?.let { hourly -> _hourlyWeatherInfo.postValue(hourly) }
     }
 
-    internal fun getNewLocation(location: String) {
-        WeatherDataRepository.directGeocoding(location)
+    private fun getWeatherData(latitude: Double, longitude: Double) {
+        WeatherDataRepository.getWeatherData(latitude, longitude, "metric")
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = { weatherForecast ->
+                    _currentWeatherInfo.postValue(weatherForecast.current)
+                    _hourlyWeatherInfo.postValue(weatherForecast.hourly)
+                    _dailyWeatherInfo.postValue(weatherForecast.daily)
+                    weatherCache.saveWeatherData(weatherForecast)
+                    Log.i("MainViewModel", "Got weather response from Repository!")
+                },
+                onError = { Log.i("MainViewModel", "Didn't get weather from Repository!") }
+            )
+    }
+
+    private fun getLocationName(latitude: Double, longitude: Double) {
+        WeatherDataRepository.getLocationName(latitude, longitude)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    if (it.isNotEmpty()) {
+                        _currentLocationName.postValue(it[0].name)
+                        weatherCache.saveLocationName(it[0].name)
+                    }
+                    Log.i("MainViewModel", "Reverse geocoded location!")
+                },
+                onError = {
+                    _currentLocationName.postValue("Location unavailable!")
+                    Log.i("MainViewModel", "Failed to reverse geocode location!")
+                }
+            )
+    }
+
+    private fun getLocationSuggestions(query: String): List<String> {
+        val suggestedLocations = mutableListOf<String>()
+        WeatherDataRepository.searchLocation(query)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = { locations ->
-                    Log.i("MainViewModel", "Got direct geocoding response from Repository!")
-                    _currentGeolocationName.postValue(locations[0].name)
+                    for (l in locations) {
+                        suggestedLocations.add(l.name)
+                    }
+                    Log.i("MainViewModel", "Got suggested locations from Repository!")
+                },
+                onError = {
+                    Log.i("MainViewModel", "Didn't get suggested locations from Repository!")
+                }
+            )
+        return suggestedLocations
+    }
 
+    private fun setLocationFromSuggestions(query: String) {
+        WeatherDataRepository.searchLocation(query)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = { locations ->
+                    if (locations.isNotEmpty()) {
+                        locations[0].name.let {
+                            _currentLocationName.postValue(it)
+                            weatherCache.saveLocationName(it)
+                        }
+                        getWeatherData(locations[0].lat, locations[0].lon)
+                    }
+                    Log.i("MainViewModel", "Got direct geocoding response from Repository!")
                 },
                 onError = {
                     Log.i("MainViewModel", "Didn't get geocoding response from Repository!")
