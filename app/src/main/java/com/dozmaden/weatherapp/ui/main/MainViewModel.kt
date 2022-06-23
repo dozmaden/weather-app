@@ -92,4 +92,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         weatherCache.getDailyWeatherCache()?.let { daily -> _dailyWeatherInfo.postValue(daily) }
         weatherCache.getHourlyWeatherCache()?.let { hourly -> _hourlyWeatherInfo.postValue(hourly) }
     }
+
+    internal fun getNewLocation(location: String) {
+        WeatherDataRepository.directGeocoding(location)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = { locations ->
+                    Log.i("MainViewModel", "Got direct geocoding response from Repository!")
+                    _currentGeolocationName.postValue(locations[0].name)
+
+                },
+                onError = {
+                    Log.i("MainViewModel", "Didn't get geocoding response from Repository!")
+                }
+            )
+    }
 }

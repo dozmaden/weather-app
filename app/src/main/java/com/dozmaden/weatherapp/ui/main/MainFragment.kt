@@ -63,7 +63,36 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         hourlyRecyclerView.layoutManager = horizontalLayoutManager
 
+        setupSearchView()
+
         return binding.root
+    }
+
+    private fun setupSearchView() {
+        val searchView = binding.searchView
+
+        searchView.setOnQueryTextListener(
+            object : android.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    //                if (list.contains(query)) {
+                    //                    adapter.filter.filter(query)
+                    //                } else {
+//                     Toast.makeText(this@MainActivity, "No Match found",
+//                     Toast.LENGTH_LONG).show()
+
+                    viewModel.getNewLocation(query)
+                    Log.i("SEARCH_VIEW", "submitted")
+                    //                }
+                    return false
+                }
+                override fun onQueryTextChange(newText: String): Boolean {
+//                    viewModel.getNewLocation(newText)
+                    Log.i("SEARCH_VIEW", "changed")
+                    //                adapter.filter.filter(newText)
+                    return false
+                }
+            }
+        )
     }
 
     private fun setLocationObserver() {
