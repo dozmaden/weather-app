@@ -16,16 +16,11 @@ A simple Android application to check weather forecast using the CurrentWeatherM
 - [x] Catch errors
 
 ### To-do
-- [ ] Choose location
-- [ ] Support app usage without location permissions
-- [ ] Support AdaptiveLayout
+- [x] Choose location
+- [ ] Share Weather Option
 - [ ] Add animations
-- [ ] Share Weather option
 - [ ] Widget support
 - [ ] Unit-tests
-- [ ] Replace RxJava with coroutines?
-- [ ] Cache data with DataStore?
-- [ ] Jetpack Compose?
 
 #### Additional information
 This application was developed during Yandex's Android development course at HSE university.
