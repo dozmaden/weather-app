@@ -34,10 +34,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val weatherCache = WeatherPreferences(application)
 
     internal fun setWeatherInfo() {
-        if (!cacheIsEmpty()) {
-            loadWeatherCache()
-        } else {
+        if (cacheIsEmpty()) {
             getWeatherInfoByLocation()
+        } else {
+            loadWeatherCache()
         }
     }
 
