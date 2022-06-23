@@ -103,7 +103,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 Glide.with(this)
                     .load("https://openweathermap.org/img/wn/" + it.weather[0].icon + "@2x.png")
                     .centerCrop()
-                    //                    .placeholder()
+                    .placeholder(R.drawable.ic_baseline_sync_24)
                     .into(binding.currentWeatherImage)
 
                 binding.currentTemperature.text =
