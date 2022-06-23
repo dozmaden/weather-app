@@ -56,7 +56,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         setDailyWeatherObserver()
         setHourlyWeatherObserver()
 
-        viewModel.getWeatherData()
+        viewModel.setWeatherInfo()
 
         dailyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         val horizontalLayoutManager =
@@ -74,21 +74,19 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         searchView.setOnQueryTextListener(
             object : android.widget.SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    //                if (list.contains(query)) {
-                    //                    adapter.filter.filter(query)
-                    //                } else {
-//                     Toast.makeText(this@MainActivity, "No Match found",
-//                     Toast.LENGTH_LONG).show()
-
-                    viewModel.getNewLocation(query)
+                    //                    if (list.contains(query)) {
+                    //                        adapter.filter.filter(query)
+                    //                    }
+                    //                else {
+                    //                     Toast.makeText(this@MainActivity, "No Match found",
+                    //                     Toast.LENGTH_LONG).show()
+                    viewModel.setLocation(query)
                     Log.i("SEARCH_VIEW", "submitted")
-                    //                }
                     return false
                 }
                 override fun onQueryTextChange(newText: String): Boolean {
-//                    viewModel.getNewLocation(newText)
+                    viewModel.searchLocations(newText)
                     Log.i("SEARCH_VIEW", "changed")
-                    //                adapter.filter.filter(newText)
                     return false
                 }
             }
@@ -96,9 +94,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun setLocationObserver() {
-        viewModel.currentGeolocationName.observe(viewLifecycleOwner) {
-            binding.locationName.text = it
-        }
+        viewModel.currentLocationName.observe(viewLifecycleOwner) { binding.locationName.text = it }
     }
 
     private fun setCurrentWeatherObserver() {
@@ -205,7 +201,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onResume() {
         Log.i("MainFragment", "On Resume!")
         checkPermissions()
-        viewModel.getWeatherData()
+        viewModel.setWeatherInfo()
         super.onResume()
     }
 
