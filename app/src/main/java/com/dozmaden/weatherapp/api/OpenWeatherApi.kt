@@ -22,8 +22,8 @@ interface OpenWeatherApi {
 
     @GET("geo/1.0/direct")
     fun directGeocoding(
-        @Path("city") city: String,
-        @Path("limit") limit: Int = 5
+        @Query("q") location: String,
+        @Query("limit") limit: Int = 5
     ): Single<LocationInfo>
 
     @GET("/geo/1.0/reverse")
