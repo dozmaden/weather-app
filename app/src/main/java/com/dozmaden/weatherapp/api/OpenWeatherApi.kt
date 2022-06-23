@@ -1,9 +1,11 @@
 package com.dozmaden.weatherapp.api
 
 import com.dozmaden.weatherapp.dto.GeocodeArray
+import com.dozmaden.weatherapp.dto.LocationInfo
 import com.dozmaden.weatherapp.dto.WeatherData
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 const val BASE_URL = "https://api.openweathermap.org/"
@@ -18,12 +20,11 @@ interface OpenWeatherApi {
         @Query("exclude") exclude: String = "minutely,alerts"
     ): Single<WeatherData>
 
-    //
-    //    @GET("/direct")
-    //    fun directGeocoding(
-    //        @Path("city") city: String,
-    //        @Path("limit") limit: Int = 5
-    //    ): Single<List<LocationInfo>>
+    @GET("/direct")
+    fun directGeocoding(
+        @Path("city") city: String,
+        @Path("limit") limit: Int = 5
+    ): Single<LocationInfo>
 
     @GET("/geo/1.0/reverse")
     fun reverseGeocoding(
