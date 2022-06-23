@@ -8,4 +8,5 @@
     <string name="visibility"> Видимость: %s metres </string>
     <string name="windspeed"> Ветер: %s m/s </string>
     <string name="pressure"> Давление: %s hPa </string>
+    <string name="share_info"> Погода в %s \n %s °C \n Ощущается как %s °C \n Влажность: %s %% \n Облачность: %s %% \n Видимость: %s metres \n Ветер: %s m/s \n Давление: %s hPa </string>
 </resources>

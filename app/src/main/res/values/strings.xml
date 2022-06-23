@@ -7,4 +7,5 @@
     <string name="visibility"> Visibility: %s metres </string>
     <string name="windspeed"> Wind Speed: %s m/s </string>
     <string name="pressure"> Pressure: %s hPa </string>
+    <string name="share_info"> Current weather at %s \n %s °C \n Feels like %s °C \n Humidity: %s %% \n Cloudiness: %s %% \n Visibility: %s metres \n Wind Speed: %s m/s \n</string>
 </resources>

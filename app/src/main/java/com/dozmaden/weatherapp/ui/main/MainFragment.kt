@@ -1,6 +1,7 @@
 package com.dozmaden.weatherapp.ui.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,9 +16,10 @@ import com.bumptech.glide.Glide
 import com.dozmaden.weatherapp.R
 import com.dozmaden.weatherapp.databinding.FragmentMainBinding
 import com.dozmaden.weatherapp.utils.GeolocationPermissionsUtility
-import java.util.Collections.emptyList
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.util.Collections.emptyList
+
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
@@ -56,20 +58,71 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         setDailyWeatherObserver()
         setHourlyWeatherObserver()
 
-        viewModel.getWeatherData()
+        viewModel.setWeatherInfo()
 
         dailyRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         val horizontalLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         hourlyRecyclerView.layoutManager = horizontalLayoutManager
 
+        setupSearchView()
+        setupShareButton()
+
         return binding.root
     }
 
-    private fun setLocationObserver() {
-        viewModel.currentGeolocationName.observe(viewLifecycleOwner) {
-            binding.locationName.text = it
+    private fun setupSearchView() {
+        val searchView = binding.searchView
+
+        searchView.setOnQueryTextListener(
+            object : android.widget.SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    //                    if (list.contains(query)) {
+                    //                        adapter.filter.filter(query)
+                    //                    }
+                    //                else {
+                    //                     Toast.makeText(this@MainActivity, "No Match found",
+                    //                     Toast.LENGTH_LONG).show()
+                    viewModel.setLocation(query)
+                    Log.i("SEARCH_VIEW", "submitted")
+                    return false
+                }
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.searchLocations(newText)
+                    Log.i("SEARCH_VIEW", "changed")
+                    return false
+                }
+            }
+        )
+    }
+
+    private fun setupShareButton() {
+        Glide.with(this)
+            .load(R.drawable.ic_baseline_share_24)
+            .centerCrop()
+            .into(binding.shareButton)
+
+        binding.shareButton.setOnClickListener {
+            val sharingIntent = Intent(Intent.ACTION_SEND)
+            sharingIntent.type = "text/plain"
+            val shareBody = resources.getString(R.string.share_info).format(
+                binding.locationName.text.toString(),
+                binding.currentTemperature.text.toString(),
+                binding.currentFeelslike.text.toString(),
+                binding.currentHumidity.text.toString(),
+                binding.currentClouds.text.toString(),
+                binding.currentVisibility.text.toString(),
+                binding.currentWindSpeed.text.toString()
+            )
+            val shareSubject = "Current Weather Information"
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
+            startActivity(Intent.createChooser(sharingIntent, "Share using"))
         }
+    }
+
+    private fun setLocationObserver() {
+        viewModel.currentLocationName.observe(viewLifecycleOwner) { binding.locationName.text = it }
     }
 
     private fun setCurrentWeatherObserver() {
@@ -78,7 +131,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 Glide.with(this)
                     .load("https://openweathermap.org/img/wn/" + it.weather[0].icon + "@2x.png")
                     .centerCrop()
-                    //                    .placeholder()
+                    .placeholder(R.drawable.ic_baseline_sync_24)
                     .into(binding.currentWeatherImage)
 
                 binding.currentTemperature.text =
@@ -176,7 +229,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onResume() {
         Log.i("MainFragment", "On Resume!")
         checkPermissions()
-        viewModel.getWeatherData()
+        viewModel.setWeatherInfo()
         super.onResume()
     }
 

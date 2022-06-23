@@ -7,6 +7,5 @@ data class LocalNames(
     val feature_name: String,
     val fr: String,
     val nl: String,
-    val no: String,
-    val ro: String
+    val ru: String
 )

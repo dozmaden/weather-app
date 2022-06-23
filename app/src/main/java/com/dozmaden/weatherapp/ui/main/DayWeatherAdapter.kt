@@ -50,7 +50,6 @@ class DayWeatherAdapter(private val mList: List<DailyWeather>) :
         val dayTemperatureTextView: TextView = itemView.findViewById(R.id.day_temperature)
         val dayTimeTextView: TextView = itemView.findViewById(R.id.day_time)
         val dayDescriptionTextView: TextView = itemView.findViewById(R.id.day_main_description)
-        val dayWeatherImageView: ImageView =
-            itemView.findViewById(R.id.daily_weather_image)
+        val dayWeatherImageView: ImageView = itemView.findViewById(R.id.daily_weather_image)
     }
 }
