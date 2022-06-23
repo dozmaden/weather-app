@@ -20,7 +20,7 @@ interface OpenWeatherApi {
         @Query("exclude") exclude: String = "minutely,alerts"
     ): Single<WeatherData>
 
-    @GET("/direct")
+    @GET("geo/1.0/direct")
     fun directGeocoding(
         @Path("city") city: String,
         @Path("limit") limit: Int = 5
